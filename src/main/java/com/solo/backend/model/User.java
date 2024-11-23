@@ -3,13 +3,14 @@ package com.solo.backend.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "\"user\"")
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String username;
     private String email;
     private String password;

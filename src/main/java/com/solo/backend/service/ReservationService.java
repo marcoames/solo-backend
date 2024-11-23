@@ -1,12 +1,13 @@
 package com.solo.backend.service;
 
-import com.solo.backend.dto.ReservationDTO;
 import com.solo.backend.model.Reservation;
 import com.solo.backend.model.User;
 import com.solo.backend.model.Hotel;
 import com.solo.backend.repository.ReservationRepository;
 import com.solo.backend.repository.UserRepository;
 import com.solo.backend.repository.HotelRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class ReservationService {
     private final UserRepository userRepository;
     private final HotelRepository hotelRepository;
 
-    // Constructor injection
+    @Autowired
     public ReservationService(ReservationRepository reservationRepository, 
                               UserRepository userRepository, 
                               HotelRepository hotelRepository) {
@@ -29,15 +30,16 @@ public class ReservationService {
     }
 
     // Create a new reservation
-    public Reservation createReservation(ReservationDTO dto) {
+    public Reservation createReservation(Reservation reservation) {
         // Find the user and hotel by their respective IDs
-        User user = userRepository.findById(dto.getUserId())
+        User user = userRepository.findById(reservation.getUser().getId())
                                   .orElseThrow(() -> new RuntimeException("User not found"));
-        Hotel hotel = hotelRepository.findById(dto.getHotelId())
+        Hotel hotel = hotelRepository.findById(reservation.getHotel().getId())
                                      .orElseThrow(() -> new RuntimeException("Hotel not found"));
 
-        // Create a new Reservation object and set its fields
-        Reservation reservation = new Reservation(null, user, hotel, dto.getCheckInDate(), dto.getCheckOutDate(), dto.getStatus());
+        // Set the user and hotel on the reservation (if not already set)
+        reservation.setUser(user);
+        reservation.setHotel(hotel);
 
         // Save the reservation to the database
         return reservationRepository.save(reservation);
@@ -56,23 +58,23 @@ public class ReservationService {
     }
 
     // Update an existing reservation
-    public Reservation updateReservation(Long id, ReservationDTO dto) {
-        Reservation reservation = reservationRepository.findById(id)
-                                                      .orElseThrow(() -> new RuntimeException("Reservation not found"));
-        User user = userRepository.findById(dto.getUserId())
+    public Reservation updateReservation(Long id, Reservation reservation) {
+        Reservation existingReservation = reservationRepository.findById(id)
+                                                              .orElseThrow(() -> new RuntimeException("Reservation not found"));
+        User user = userRepository.findById(reservation.getUser().getId())
                                   .orElseThrow(() -> new RuntimeException("User not found"));
-        Hotel hotel = hotelRepository.findById(dto.getHotelId())
+        Hotel hotel = hotelRepository.findById(reservation.getHotel().getId())
                                      .orElseThrow(() -> new RuntimeException("Hotel not found"));
 
         // Update reservation details
-        reservation.setUser(user);
-        reservation.setHotel(hotel);
-        reservation.setCheckInDate(dto.getCheckInDate());
-        reservation.setCheckOutDate(dto.getCheckOutDate());
-        reservation.setStatus(dto.getStatus());
+        existingReservation.setUser(user);
+        existingReservation.setHotel(hotel);
+        existingReservation.setCheckInDate(reservation.getCheckInDate());
+        existingReservation.setCheckOutDate(reservation.getCheckOutDate());
+        existingReservation.setStatus(reservation.getStatus());
 
         // Save the updated reservation
-        return reservationRepository.save(reservation);
+        return reservationRepository.save(existingReservation);
     }
 
     // Delete a reservation by ID
