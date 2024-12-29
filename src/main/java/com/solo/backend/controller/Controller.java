@@ -28,10 +28,11 @@ public class Controller {
     }
 
     // Reservation endpoints
-    @PostMapping("/reservations")
-    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
-        Reservation createdReservation = reservationService.createReservation(reservation);
-        return ResponseEntity.status(201).body(createdReservation);
+
+    @GetMapping("/reservations")
+    public ResponseEntity<List<Reservation>> getAllReservations() {
+        List<Reservation> allReservations = reservationService.getAllReservations();
+        return ResponseEntity.ok(allReservations);
     }
 
     @GetMapping("/reservations/user/{userId}")
@@ -69,6 +70,12 @@ public class Controller {
     }
 
     // User endpoints
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> allUsers = userService.getAllUsers();
+        return ResponseEntity.ok(allUsers);
+    }
+
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         Optional<User> user = userService.getUserById(id);
@@ -102,6 +109,11 @@ public class Controller {
     }
 
     // Hotel endpoints
+    @GetMapping("/hotels")
+    public ResponseEntity<List<Hotel>> getAllHotels() {
+        List<Hotel> allHotels = hotelService.getAllHotels();
+        return ResponseEntity.ok(allHotels);
+    }
     @GetMapping("/hotels/{id}")
     public ResponseEntity<Hotel> getHotelById(@PathVariable Long id) {
         Optional<Hotel> hotel = hotelService.getHotelById(id);
@@ -132,4 +144,6 @@ public class Controller {
         }
         return ResponseEntity.noContent().build();
     }
+
+    
 }

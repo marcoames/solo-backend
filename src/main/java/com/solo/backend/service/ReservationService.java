@@ -57,6 +57,11 @@ public class ReservationService {
         return reservationRepository.findById(id);
     }
 
+    // List all reservations
+    public List<Reservation> getAllReservations() {
+        return reservationRepository.findAll();
+    }
+
     // Update an existing reservation
     public Reservation updateReservation(Long id, Reservation reservation) {
         Reservation existingReservation = reservationRepository.findById(id)
