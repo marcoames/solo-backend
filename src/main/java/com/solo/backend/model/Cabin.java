@@ -3,7 +3,7 @@ package com.solo.backend.model;
 import jakarta.persistence.*;
 
 @Entity
-public class Hotel {
+public class Cabin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -12,11 +12,11 @@ public class Hotel {
     private String address;
 
     // Default constructor
-    public Hotel() {
+    public Cabin() {
     }
 
     // Constructor with parameters
-    public Hotel(Long id, String name, String address) {
+    public Cabin(Long id, String name, String address) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -52,15 +52,15 @@ public class Hotel {
     // Optional: Override toString, equals, and hashCode if needed
     @Override
     public String toString() {
-        return "Hotel{id=" + id + ", name='" + name + "', address='" + address + "'}";
+        return "Cabin{id=" + id + ", name='" + name + "', address='" + address + "'}";
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Hotel hotel = (Hotel) obj;
-        return id != null && id.equals(hotel.id);
+        if (!(obj instanceof Cabin)) return false;
+        Cabin cabin = (Cabin) obj;
+        return id != null && id.equals(cabin.id);
     }
 
     @Override

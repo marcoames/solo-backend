@@ -12,8 +12,8 @@ public class Reservation {
     @ManyToOne  // Many reservations can belong to one user
     private User user;
 
-    @ManyToOne  // Many reservations can belong to one hotel
-    private Hotel hotel;
+    @ManyToOne  // Many reservations can belong to one cabin
+    private Cabin cabin;
 
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
@@ -24,10 +24,10 @@ public class Reservation {
     }
 
     // Constructor with parameters
-    public Reservation(Long id, User user, Hotel hotel, LocalDate checkInDate, LocalDate checkOutDate, String status) {
+    public Reservation(Long id, User user, Cabin cabin, LocalDate checkInDate, LocalDate checkOutDate, String status) {
         this.id = id;
         this.user = user;
-        this.hotel = hotel;
+        this.cabin = cabin;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.status = status;
@@ -51,13 +51,13 @@ public class Reservation {
         this.user = user;
     }
 
-    // Getter and Setter for hotel
-    public Hotel getHotel() {
-        return hotel;
+    // Getter and Setter for cabin
+    public Cabin getCabin() {
+        return cabin;
     }
 
-    public void setHotel(Hotel hotel) {
-        this.hotel = hotel;
+    public void setCabin(Cabin cabin) {
+        this.cabin = cabin;
     }
 
     // Getter and Setter for checkInDate
@@ -90,7 +90,14 @@ public class Reservation {
     // Optional: Override toString, equals, and hashCode if needed
     @Override
     public String toString() {
-        return "Reservation{id=" + id + ", user=" + user + ", hotel=" + hotel + ", checkInDate=" + checkInDate + ", checkOutDate=" + checkOutDate + ", status='" + status + "'}";
+        return "Reservation{" +
+                "id=" + id +
+                ", user=" + user +
+                ", cabin=" + cabin +
+                ", checkInDate=" + checkInDate +
+                ", checkOutDate=" + checkOutDate +
+                ", status='" + status + '\'' +
+                '}';
     }
 
     @Override

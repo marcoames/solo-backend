@@ -2,10 +2,10 @@ package com.solo.backend.controller;
 
 import com.solo.backend.model.Reservation;
 import com.solo.backend.model.User;
-import com.solo.backend.model.Hotel;
+import com.solo.backend.model.Cabin;
 import com.solo.backend.service.ReservationService;
 import com.solo.backend.service.UserService;
-import com.solo.backend.service.HotelService;
+import com.solo.backend.service.CabinService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,13 +18,13 @@ public class Controller {
 
     private final ReservationService reservationService;
     private final UserService userService;
-    private final HotelService hotelService;
+    private final CabinService cabinService;
 
     // Constructor injection
-    public Controller(ReservationService reservationService, UserService userService, HotelService hotelService) {
+    public Controller(ReservationService reservationService, UserService userService, CabinService cabinService) {
         this.reservationService = reservationService;
         this.userService = userService;
-        this.hotelService = hotelService;
+        this.cabinService = cabinService;
     }
 
     // Reservation endpoints
@@ -108,41 +108,41 @@ public class Controller {
         return ResponseEntity.noContent().build();
     }
 
-    // Hotel endpoints
-    @GetMapping("/hotels")
-    public ResponseEntity<List<Hotel>> getAllHotels() {
-        List<Hotel> allHotels = hotelService.getAllHotels();
-        return ResponseEntity.ok(allHotels);
-    }
-    @GetMapping("/hotels/{id}")
-    public ResponseEntity<Hotel> getHotelById(@PathVariable Long id) {
-        Optional<Hotel> hotel = hotelService.getHotelById(id);
-        return hotel.map(ResponseEntity::ok)
-                    .orElseGet(() -> ResponseEntity.notFound().build());
+    // Cabin endpoints
+    @GetMapping("/cabins")
+    public ResponseEntity<List<Cabin>> getAllCabins() {
+        List<Cabin> allCabins = cabinService.getAllCabins();
+        return ResponseEntity.ok(allCabins);
     }
 
-    @PostMapping("/hotels")
-    public ResponseEntity<Hotel> createHotel(@RequestBody Hotel hotel) {
-        Hotel createdHotel = hotelService.createHotel(hotel);
-        return ResponseEntity.status(201).body(createdHotel);
+    @GetMapping("/cabins/{id}")
+    public ResponseEntity<Cabin> getCabinById(@PathVariable Long id) {
+        Optional<Cabin> cabin = cabinService.getCabinById(id);
+        return cabin.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/hotels/{id}")
-    public ResponseEntity<Hotel> updateHotel(@PathVariable Long id, @RequestBody Hotel hotel) {
-        Hotel updatedHotel = hotelService.updateHotel(id, hotel);
-        if (updatedHotel == null) {
-            return ResponseEntity.notFound().build();
+    @PostMapping("/cabins")
+    public ResponseEntity<Cabin> createCabin(@RequestBody Cabin cabin) {
+        Cabin createdCabin = cabinService.createCabin(cabin);
+        return ResponseEntity.ok(createdCabin);
+    }
+
+    @PutMapping("/cabins/{id}")
+    public ResponseEntity<Cabin> updateCabin(@PathVariable Long id, @RequestBody Cabin cabin) {
+        Cabin updatedCabin = cabinService.updateCabin(id, cabin);
+        if (updatedCabin != null) {
+            return ResponseEntity.ok(updatedCabin);
         }
-        return ResponseEntity.ok(updatedHotel);
+        return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/hotels/{id}")
-    public ResponseEntity<Void> deleteHotel(@PathVariable Long id) {
-        boolean isDeleted = hotelService.deleteHotel(id);
-        if (!isDeleted) {
-            return ResponseEntity.notFound().build();
+    @DeleteMapping("/cabins/{id}")
+    public ResponseEntity<Void> deleteCabin(@PathVariable Long id) {
+        if (cabinService.deleteCabin(id)) {
+            return ResponseEntity.ok().build();
         }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.notFound().build();
     }
 
     
